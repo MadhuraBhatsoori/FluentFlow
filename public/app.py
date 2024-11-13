@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app) 
 
-GOOGLE_API_KEY='AIzaSyCiVBKK51Rf4VO82AaFiXRNfCCEFGlTcDU'
-genai.configure(api_key='AIzaSyCiVBKK51Rf4VO82AaFiXRNfCCEFGlTcDU')
+GOOGLE_API_KEY='API_KEY'
+genai.configure(api_key='API_KEY')
 
 myfile = genai.upload_file("1.wav")
 print(f"{myfile=}")
