@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Analysis Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .reports-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .report {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+            transition: transform 0.2s ease;
+        }
+
+        .report:hover {
+            transform: translateY(-5px);
+        }
+
+        .donut-chart {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .donut-chart circle {
+            fill: none;
+            stroke-width: 15;
+        }
+
+        .donut-chart .background {
+            stroke: #eee;
+        }
+
+        .donut-chart .progress {
+            stroke: #2e1959;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .donut-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: black;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: black;
+            border-radius: 2px;
+        }
+
+        h3 {
+            margin: 0 0 10px 0;
+            color: #2e1959;
+            font-size: 18px;
+        }
+
+        .analysis-text {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: left;
+            line-height: 1.5;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 4px;
+            border: 1px solid #dc3545;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2e1959;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Speech Analysis Report</h1>
+        <div class="reports-container">
+            <div class="report">
+                <h3>Sentence Structure & Grammar</h3>
+                <div class="donut-chart">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="background" cx="50" cy="50" r="40" />
+                        <circle class="progress" cx="50" cy="50" r="40" 
+                                stroke-dasharray="0 251.2" 
+                                transform="rotate(-90 50 50)" />
+                    </svg>
+                    <div class="donut-text">0%</div>
+                </div>
+                <div id="analysisText1" class="analysis-text">
+                    <div class="loading"></div>
+                    Analyzing sentence structure...
+                </div>
+            </div>
+
+            <div class="report">
+                <h3>Speech Clarity & Speed</h3>
+                <div class="donut-chart">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="background" cx="50" cy="50" r="40" />
+                        <circle class="progress" cx="50" cy="50" r="40" 
+                                stroke-dasharray="0 251.2" 
+                                transform="rotate(-90 50 50)" />
+                    </svg>
+                    <div class="donut-text">0%</div>
+                </div>
+                <div id="analysisText2" class="analysis-text">
+                    <div class="loading"></div>
+                    Analyzing speech clarity...
+                </div>
+            </div>
+
+            <div class="report">
+                <h3>Confidence & Pitch</h3>
+                <div class="donut-chart">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="background" cx="50" cy="50" r="40" />
+                        <circle class="progress" cx="50" cy="50" r="40" 
+                                stroke-dasharray="0 251.2" 
+                                transform="rotate(-90 50 50)" />
+                    </svg>
+                    <div class="donut-text">0%</div>
+                </div>
+                <div id="analysisText3" class="analysis-text">
+                    <div class="loading"></div>
+                    Analyzing confidence levels...
+                </div>
+            </div>
+        </div>
+        <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <script>
+        // Configure API endpoint
+        const API_ENDPOINT = 'http://localhost:5000/api/analyze';
+
+        // Function to update donut chart with animation
+        function setDonutPercentage(chart, percentage = 0) {
+            const circle = chart.querySelector('.progress');
+            const text = chart.querySelector('.donut-text');
+            const radius = 40;
+            const circumference = 2 * Math.PI * radius;
+            const dashArray = (percentage / 100) * circumference;
+
+            // Reset the animation
+            circle.style.transition = 'none';
+            circle.style.strokeDasharray = `0 ${circumference}`;
+
+            // Force reflow
+            circle.getBoundingClientRect();
+
+            // Enable animation and set final value
+            circle.style.transition = 'stroke-dasharray 1s ease-in-out';
+            circle.style.strokeDasharray = `${dashArray} ${circumference}`;
+            
+            // Animate percentage text
+            animateValue(text, parseInt(text.textContent), percentage, 1000);
+        }
+
+        // Function to animate number values
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = Math.floor(progress * (end - start) + start);
+                obj.textContent = `${current}%`;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Function to update analysis section
+        function updateAnalysisSection(elementId, text, score) {
+            const textElement = document.getElementById(elementId);
+            const chartContainer = textElement.closest('.report').querySelector('.donut-chart');
+            
+            // Update chart
+            setDonutPercentage(chartContainer, score);
+            
+            // Update analysis text with fade effect
+            textElement.style.opacity = '0';
+            setTimeout(() => {
+                textElement.textContent = text;
+                textElement.style.opacity = '1';
+            }, 300);
+        }
+
+        // Function to show error message
+        function showError(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerHTML = `<div class="error">${message}</div>`;
+            
+            ['analysisText1', 'analysisText2', 'analysisText3'].forEach(id => {
+                const element = document.getElementById(id);
+                element.innerHTML = '<div class="error">Analysis unavailable</div>';
+                
+                // Reset charts to 0%
+                const chart = element.closest('.report').querySelector('.donut-chart');
+                setDonutPercentage(chart, 0);
+            });
+        }
+
+        // Function to extract score from AI response
+        function extractScore(text) {
+            // This is a placeholder scoring logic - adjust based on your AI response format
+            return Math.floor(Math.random() * (95 - 75 + 1)) + 75;
+        }
+
+        // Main function to fetch and display analysis
+        async function fetchAnalysis() {
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Clear status message
+                    document.getElementById('statusMessage').textContent = '';
+                    
+                    // Update each section with analysis and scores
+                    updateAnalysisSection(
+                        'analysisText1', 
+                        data.results.sentenceStructure,
+                        extractScore(data.results.sentenceStructure)
+                    );
+                    
+                    updateAnalysisSection(
+                        'analysisText2', 
+                        data.results.speechClarity,
+                        extractScore(data.results.speechClarity)
+                    );
+                    
+                    updateAnalysisSection(
+                        'analysisText3', 
+                        data.results.confidencePitch,
+                        extractScore(data.results.confidencePitch)
+                    );
+                } else {
+                    throw new Error(data.error || 'Failed to get analysis');
+                }
+
+            } catch (error) {
+                console.error('Error fetching analysis:', error);
+                showError('Failed to load analysis. Please try again later.');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial setup of charts
+            const charts = document.querySelectorAll('.donut-chart');
+            charts.forEach(chart => setDonutPercentage(chart, 0));
+            
+            // Fetch initial analysis
+            fetchAnalysis();
+        });
+    </script>
+</body>
+</html>
