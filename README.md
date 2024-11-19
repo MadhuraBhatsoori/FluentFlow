@@ -1,5 +1,21 @@
 # FluentFlow
 
+## Testing Instructions
+
+1. Clone the repository
+2. Install dependencies:
+   pip install pyaudio
+   pip install numpy
+   pip install pymongo
+   pip install librosa
+   pip install panns_inference
+   pip install torch
+   pip install python-dotenv
+   pip install certifi
+3. Run app.js
+4. Go to public folder:
+   Run  
+
 ## Inspiration
 
 In today's competitive world, effective communication is one of the most crucial skills for leadership and career growth. Yet many women face barriers in expressing their ideas confidently, clearly, and with the structure needed to influence decision-making and leadership dynamics. To address this, we built an AI-powered real-time speech analysis tool that provides actionable insights to improve clarity, structure, and confidence in communication. This tool empowers users by giving detailed feedback, helping them grow their leadership presence and career potential. By delivering personalised, data-driven guidance, tool aims provide support to overcome communication challenges and thrive in leadership roles.
