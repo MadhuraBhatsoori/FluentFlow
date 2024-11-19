@@ -12,9 +12,11 @@
    pip install torch
    pip install python-dotenv
    pip install certifi
-3. Run app.js
-4. Go to public folder:
-   Run  
+   npm install
+4. Run app.js
+5. Go to public folder:
+   Run app.py
+6. Go to browser to open the link http://localhost:3000/
 
 ## Inspiration
 
