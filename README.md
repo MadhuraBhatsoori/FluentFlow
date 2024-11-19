@@ -5,14 +5,23 @@
 1. Clone the repository
 2. Install dependencies:
    pip install pyaudio
+   
    pip install numpy
+   
    pip install pymongo
+   
    pip install librosa
+   
    pip install panns_inference
+   
    pip install torch
+   
    pip install python-dotenv
+   
    pip install certifi
+   
    npm install
+   
 4. Run app.js
 5. Go to public folder:
    Run app.py
