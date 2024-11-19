@@ -21,11 +21,13 @@
    pip install certifi
    
    npm install
+3. Create .env file to store mongodb connection
+   MONGO_CONNECTION_STRING="mongodb+srv://madhura:mongodb@windmill.71gdx.mongodb.net/"
    
-4. Run app.js
-5. Go to public folder:
+5. Run app.js
+6. Go to public folder:
    Run app.py
-6. Go to browser to open the link http://localhost:3000/
+7. Go to browser to open the link http://localhost:3000/
 
 ## Inspiration
 
