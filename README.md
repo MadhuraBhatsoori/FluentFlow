@@ -22,7 +22,7 @@
    
    npm install
 3. Create .env file to store mongodb connection
-   MONGO_CONNECTION_STRING="mongodb+srv://madhura:mongodb@windmill.71gdx.mongodb.net/"
+   
    
 5. Run app.js
 6. Go to public folder:
